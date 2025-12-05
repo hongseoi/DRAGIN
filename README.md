@@ -1,4 +1,4 @@
-# DRAGIN
+# DRAGIN & Dynamic RAG Toolbox
 
 
 ## 📌 ATTENTION: A Critical Pinned Message for Reproduction
