@@ -23,7 +23,7 @@ class BasicGenerator:
     def __init__(self, model_name_or_path):
         logger.info(f"Loading model from {model_name_or_path}")
         self.tokenizer = AutoTokenizer.from_pretrained(model_name_or_path)
-        
+        self.tokenizer.truncation_side = 'left'
         # [수정 1] 패딩 설정
         if self.tokenizer.pad_token is None:
             self.tokenizer.pad_token = self.tokenizer.eos_token
@@ -406,6 +406,11 @@ class SingleRAG(BasicRAG):
     def inference(self, question, demo, case):
         assert self.query_formulation == "direct"
         docs = self.retrieve(question, topk=self.retrieve_topk)
+        # [DEBUG CODE START]
+        print(f"\n[DEBUG] Question: {question}")
+        print(f"[DEBUG] Retrieved Docs Count: {len(docs)}")
+        print(f"[DEBUG] Top 1 Doc Content: {docs[0] if len(docs) > 0 else 'EMPTY'}")
+        # [DEBUG CODE END]
         # 对 topk 个 passage 生成 prompt
         prompt = "".join([d["case"]+"\n" for d in demo])
         prompt += "Context:\n"
