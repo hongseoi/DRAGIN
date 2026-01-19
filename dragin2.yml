@@ -1,0 +1,23 @@
+name: dragin2
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - pip
+  - wheel
+  - setuptools
+  # 아래는 필수 시스템 라이브러리들입니다.
+  # 만약 설치 중 "ResolvePackageNotFound" 오류가 나면
+  # python, pip, wheel, setuptools만 남기고 나머지는 지워도 됩니다.
+  - bzip2
+  - ca-certificates
+  - libffi
+  - libgcc-ng
+  - openssl
+  - readline
+  - sqlite
+  - tk
+  - xz
+  - zlib
+  - zstd

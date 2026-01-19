@@ -1,16 +1,19 @@
 {
     "model_name_or_path": "meta-llama/Llama-2-7b-chat-hf",
-    "method": "fix-length-retrieval",
+    "method": "single-retrieval",
     "dataset": "2wikimultihopqa",
     "data_path": "../data/2wikimultihopqa",
-    "fewshot": 6,
+    "fewshot": 4,
     "sample": 1000,
     "shuffle": false,
-    "generate_max_length": 64,
+    "generate_max_length": 50,
     "query_formulation": "direct",
-    "output_dir": "../result/llama2_7b_chat_2wikimultihopqa",
+    "retrieve_keep_top_k": 15,
+    "output_dir": "../result/llama-2-7b-chat_2wikimultihopqa_single-retrieval",
     "retriever": "BM25",
     "es_index_name": "wiki",
     "retrieve_topk": 3,
+    "hallucination_threshold": 0.8,
+    "check_real_words": true,
     "use_counter": true
 }

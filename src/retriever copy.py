@@ -38,8 +38,6 @@ BM25Search = FixedBM25Search
 def get_random_doc_id():
     return f'_{uuid.uuid4()}'
 
-# Retriever.py 내부의 BM25 클래스 수정
-
 class BM25:
     def __init__(
         self,
@@ -53,19 +51,10 @@ class BM25:
         assert engine in {'elasticsearch', 'bing'}
         if engine == 'elasticsearch':
             self.max_ret_topk = 1000
-            
-            # [수정] keys 인자를 추가하여 필드명을 매핑합니다.
-            # 데이터셋의 'title' -> 'title', 'txt' -> 'txt'로 매핑
+            # 여기서 FixedBM25Search(위에서 BM25Search로 이름 바꿈)가 사용됨
             self.retriever = EvaluateRetrieval(
-                BM25Search(
-                    index_name=index_name, 
-                    hostname='localhost', 
-                    initialize=False, 
-                    number_of_shards=1,
-                    keys={"title": "title", "body": "txt"}  # <--- ★ 이 줄이 핵심입니다!
-                ),
-                k_values=[self.max_ret_topk]
-            )
+                BM25Search(index_name=index_name, hostname='localhost', initialize=False, number_of_shards=1),
+                k_values=[self.max_ret_topk])
 
     def retrieve(
         self,

@@ -1,0 +1,24 @@
+{
+    "model_name_or_path": "meta-llama/Llama-2-7b-chat-hf",
+    "method": "sae_trigger",
+    "dataset": "hotpotqa",
+    "data_path": "../data/hotpotqa",
+    "fewshot": 4,
+    "sample": 1000,
+    "shuffle": false,
+    "generate_max_length": 50,
+    "query_formulation": "real_words",
+    "retrieve_keep_top_k": 15,
+    "output_dir": "../result/llama-2-7b-chat_hotpotqa_sae",
+    "retriever": "BM25",
+    "es_index_name": "wiki",
+    "retrieve_topk": 3,
+    "check_real_words": true,
+    "use_counter": true,
+    
+    "//_comment": "SAE Adaptive RAG Settings",
+    "search_threshold": 0.5,
+    "lr_model_path": "/home/seoi0215/trend/SAE/data_classification/Verifed_code/output/10_visualization_optimized_top_10/optimized_pipeline_top10.pkl",
+    "feature_csv_path": "/home/seoi0215/trend/SAE/data_classification/Verifed_code/output/10_visualization_optimized_top_10/final_selected_features_top10.csv",
+    "sae_layer_index": 20
+}

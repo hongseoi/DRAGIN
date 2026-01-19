@@ -11,6 +11,7 @@ from tqdm import tqdm
 import numpy as np
 from datasets import Dataset
 
+
 logging.basicConfig(level=logging.INFO) 
 logger = logging.getLogger(__name__)
 
@@ -578,3 +579,132 @@ class IIRC(BaseDataset):
                 return pred
         else:
             return ""
+
+class Musique(BaseDataset):
+    examplars: List[Dict] = [
+        {
+            "question": "When did the band, of which the singer of 'Stars' is a member, form?",
+            "cot": "The singer of 'Stars' is Dubstar. Dubstar was formed in 1992.",
+            "answer": "1992"
+        },
+        {
+            "question": "What country is the director of 'The Good, the Bad and the Ugly' from?",
+            "cot": "'The Good, the Bad and the Ugly' was directed by Sergio Leone. Sergio Leone is from Italy.",
+            "answer": "Italy"
+        },
+        {
+            "question": "Who is the grandchild of the person who directed 'The Birds'?",
+            "cot": "'The Birds' was directed by Alfred Hitchcock. Alfred Hitchcock has a grandchild named Mary Stone.",
+            "answer": "Mary Stone"
+        },
+        {
+            "question": "When was the institute where the discoverer of Polonium worked founded?",
+            "cot": "Polonium was discovered by Marie Curie. She worked at the Curie Institute (Paris). The Curie Institute was founded in 1920.",
+            "answer": "1920"
+        },
+        {
+            "question": "What is the capital of the country where the band 'The Beatles' formed?",
+            "cot": "'The Beatles' formed in the United Kingdom. The capital of the United Kingdom is London.",
+            "answer": "London"
+        }
+    ]
+    demo_input_template = lambda self, ques: f'Question: {ques}\nAnswer:'
+    test_input_template = lambda self, ques: f'Answer the following question by reasoning step-by-step, following the example above.\nQuestion: {ques}\nAnswer:' 
+    output_template = lambda self, cot, ans: f'{cot} So the answer is {ans}.'
+
+    def __init__(self, data_path: str):
+        logger.info(f"Loading Musique from {data_path}")
+        dataset = []
+        # 저장된 파일명: musique_dev.json
+        with open(os.path.join(data_path, "musique_dev.json"), "r") as f:
+            raw_data = json.load(f)
+            
+        for item in raw_data:
+            dataset.append({
+                "qid": item["id"],
+                "question": item["question"],
+                "answer": item["answer"][0] if isinstance(item["answer"], list) else item["answer"]
+            })
+        self.dataset = Dataset.from_list(dataset)
+
+
+class NQ(BaseDataset):
+    examplars = [
+        {"question": "where does the rhine river flow into the north sea?", "cot": "The Rhine flows into the North Sea at Rotterdam.", "answer": "Rotterdam"},
+        {"question": "who played the role of magneto in x-men?", "cot": "Ian McKellen played the role of Magneto.", "answer": "Ian McKellen"},
+        {"question": "who wrote the song i will always love you?", "cot": "Dolly Parton wrote the song.", "answer": "Dolly Parton"},
+        {"question": "what is the largest country in the world by area?", "cot": "Russia is the largest country.", "answer": "Russia"},
+        {"question": "when did the us civil war end?", "cot": "The US Civil War ended in 1865.", "answer": "1865"}
+    ]
+    demo_input_template = lambda self, ques: f'Question: {ques}\nAnswer:'
+    test_input_template = lambda self, ques: f'Question: {ques}\nAnswer:' 
+    output_template = lambda self, cot, ans: f'{ans}'
+
+    def __init__(self, data_path: str):
+        logger.info(f"Loading NQ from {data_path}")
+        dataset = []
+        with open(os.path.join(data_path, "nq_dev.json"), "r") as f:
+            raw_data = json.load(f)
+
+        for item in raw_data:
+            dataset.append({
+                "qid": item["id"],
+                "question": item["question"],
+                "answer": item["answer"] # List of strings
+            })
+        self.dataset = Dataset.from_list(dataset)
+
+
+class SQuAD(BaseDataset):
+    examplars = [
+        {"question": "In what country is Normandy located?", "cot": "Normandy is in France.", "answer": "France"},
+        {"question": "When were the Normans in Normandy?", "cot": "In the 10th and 11th centuries.", "answer": "10th and 11th centuries"},
+        {"question": "What causes precipitation to fall?", "cot": "Gravity causes precipitation to fall.", "answer": "gravity"},
+        {"question": "Which NFL team represented the AFC at Super Bowl 50?", "cot": "The Denver Broncos represented the AFC.", "answer": "Denver Broncos"},
+        {"question": "What is the rank of the police officer?", "cot": "The rank is Detective.", "answer": "Detective"}
+    ]
+
+    demo_input_template = lambda self, ques: f'Question: {ques}\nAnswer:'
+    test_input_template = lambda self, ques: f'Question: {ques}\nAnswer:' 
+    output_template = lambda self, cot, ans: f'{ans}'
+
+    def __init__(self, data_path: str):
+        logger.info(f"Loading SQuAD from {data_path}")
+        dataset = []
+        with open(os.path.join(data_path, "squad_dev.json"), "r") as f:
+            raw_data = json.load(f)
+            
+        for item in raw_data:
+            dataset.append({
+                "qid": item["id"],
+                "question": item["question"],
+                "answer": item["answer"] # List of strings
+            })
+        self.dataset = Dataset.from_list(dataset)
+
+
+class TQA(BaseDataset):
+    examplars = [
+        {"question": "Which Lloyd Webber musical premiered in the US on 10th December 1993?", "cot": "Sunset Boulevard.", "answer": "Sunset Boulevard"},
+        {"question": "Who was the 40th President of the USA?", "cot": "Ronald Reagan.", "answer": "Ronald Reagan"},
+        {"question": "What represents the letter 'S' in Morse code?", "cot": "Three dots represent 'S'.", "answer": "three dots"},
+        {"question": "Which American state is nearest to the former Soviet Union?", "cot": "Alaska is the nearest state.", "answer": "Alaska"},
+        {"question": "In which city is the headquarters of the United Nations?", "cot": "The headquarters is in New York City.", "answer": "New York City"}
+    ]
+    demo_input_template = lambda self, ques: f'Question: {ques}\nAnswer:'
+    test_input_template = lambda self, ques: f'Question: {ques}\nAnswer:' 
+    output_template = lambda self, cot, ans: f'{ans}'
+
+    def __init__(self, data_path: str):
+        logger.info(f"Loading TriviaQA from {data_path}")
+        dataset = []
+        with open(os.path.join(data_path, "tqa_dev.json"), "r") as f:
+            raw_data = json.load(f)
+            
+        for item in raw_data:
+            dataset.append({
+                "qid": item["id"],
+                "question": item["question"],
+                "answer": item["answer"] # List of strings (aliases)
+            })
+        self.dataset = Dataset.from_list(dataset)

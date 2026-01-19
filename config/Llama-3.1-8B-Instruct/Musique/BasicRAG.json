@@ -1,0 +1,19 @@
+{
+    "model_name_or_path": "meta-llama/Llama-3.1-8B-Instruct",
+    "method": "non-retrieval",
+    "dataset": "musique",
+    "data_path": "../data/musique",
+    "fewshot": 4,
+    "sample": 1000,
+    "shuffle": false,
+    "generate_max_length": 50,
+    "query_formulation": "direct",
+    "retrieve_keep_top_k": 15,
+    "output_dir": "../result/llama-3.1-8B_musique_non-retrieval",
+    "retriever": "BM25",
+    "es_index_name": "wiki",
+    "retrieve_topk": 3,
+    "hallucination_threshold": 0.8,
+    "check_real_words": true,
+    "use_counter": true
+}
